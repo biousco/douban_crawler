@@ -15,23 +15,39 @@ router.get('/', function(req, res, next) {
 
 	crawlerLib.getBookListUrl(function (result) {
 		bookUrllist = result;
-		for(var i = 0; i < bookUrllist.length; i++) {
-			crawlerLib.getUrlContent(bookUrllist[i],function (abook) {
-				var book = crawlerLib.getBookInfo(abook);
-				bookList.push(book);
-				count++;
-				console.log("has finished: " + count + " total: " + bookUrllist.length);
-			})
-		}
+		var ep = new eventproxy();
 
-		setInterval(function () {
-			if(count < bookUrllist.length) return;
-			console.log('yep!');
+		ep.after('craw_finished', bookUrllist.length, function () {
 			render_res.render('crawler', { 
 				title: 'Crawler',
 				bookList: bookList
 			});
-		},2000);
+		})
+
+		bookUrllist.forEach(function (bookurl) {
+			crawlerLib.getUrlContent(bookurl,function (abook) {
+				var book = crawlerLib.getBookInfo(abook);
+				bookList.push(book);
+				console.log("has finished: " + count + " total: " + bookUrllist.length);
+				ep.emit('craw_finished');
+				count++;
+			})
+		})
+
+		// for(var i = 0; i < bookUrllist.length; i++) {
+		// 	crawlerLib.getUrlContent(bookUrllist[i],function (abook) {
+
+		// 		count++;
+				
+		// 	})
+		// }
+
+		// var timer = setInterval(function () {
+		// 	if(count < bookUrllist.length) return;
+		// 	console.log('yep!');
+
+		// 	clearInterval(timer);
+		// },2000);
 
 	});
 

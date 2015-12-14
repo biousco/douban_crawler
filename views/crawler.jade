@@ -1,7 +1,12 @@
 extends layout
 
+block append head
+	script(src='/javascripts/vendor/socket.js')
+	script(src='/javascripts/crawler/index.js')
+
 block content
-	each book in bookList
-		p.title= book.name
-		p.author= book.author
-		p.ISBN= book.ISBN
+	p=content
+	//- each book in bookList
+	//- 	p.title= book.name
+	//- 	p.author= book.author
+	//- 	p.ISBN= book.ISBN

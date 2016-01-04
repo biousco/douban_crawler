@@ -5,8 +5,15 @@ block append head
 	script(src='/javascripts/crawler/index.js')
 
 block content
-	p=content
-	//- each book in bookList
-	//- 	p.title= book.name
-	//- 	p.author= book.author
-	//- 	p.ISBN= book.ISBN
+	.container
+		.row
+			.col-md-12
+				h1 首页随机5条数据
+				each book in bookList
+					.panel.panel-success
+						.panel-heading= book.name
+						ul.list-group
+							li.list-group-item 书籍作者：#{book.author}
+							li.list-group-item ISBN：#{book.ISBN}
+
+
